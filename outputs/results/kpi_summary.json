@@ -1,0 +1,37 @@
+{
+  "year_2025": {
+    "revenue": 4067579.84,
+    "profit": 1760909.77,
+    "orders": 25897,
+    "units": 51184,
+    "margin_pct": 43.3,
+    "avg_order_value": 157.07,
+    "change_pct": {
+      "revenue": 9.5,
+      "profit": 10.9,
+      "orders": 12.1,
+      "avg_order_value": -2.3,
+      "margin_pts": 0.6
+    },
+    "previous_period": {
+      "start": "2024-01-01",
+      "end": "2024-12-31"
+    }
+  },
+  "year_2024": {
+    "revenue": 3714288.93,
+    "profit": 1587837.57,
+    "orders": 23097,
+    "units": 45841,
+    "margin_pct": 42.7,
+    "avg_order_value": 160.81
+  },
+  "all_time": {
+    "revenue": 7781868.77,
+    "profit": 3348747.34,
+    "orders": 48994,
+    "units": 97025,
+    "margin_pct": 43.0,
+    "avg_order_value": 158.83
+  }
+}

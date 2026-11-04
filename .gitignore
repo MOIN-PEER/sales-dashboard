@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.env
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+node_modules/
+
+# The database is rebuilt automatically on first run (python -m sales_dashboard build)
+data/*.db

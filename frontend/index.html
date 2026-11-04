@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sales Performance Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Libraries are bundled in vendor/ so the dashboard works offline -->
+  <script src="vendor/vue.global.prod.js"></script>
+  <script src="vendor/chart.umd.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+  <header class="topbar">
+    <div>
+      <h1>Sales Performance Dashboard</h1>
+      <p class="sub">UK retailer · synthetic data · {{ periodLabel }}</p>
+    </div>
+    <div class="status" :class="{ error: error }">
+      <span v-if="loading">Loading…</span>
+      <span v-else-if="error">{{ error }}</span>
+      <span v-else>Updated {{ updatedAt }}</span>
+    </div>
+  </header>
+
+  <section class="filters" aria-label="Filters">
+    <div class="presets">
+      <button v-for="p in presets" :key="p.label" :class="{ active: activePreset === p.label }"
+              @click="applyPreset(p)">{{ p.label }}</button>
+    </div>
+    <label>From <input type="date" v-model="f.start" :min="options.min_date" :max="f.end" @change="activePreset = null"></label>
+    <label>To <input type="date" v-model="f.end" :min="f.start" :max="options.max_date" @change="activePreset = null"></label>
+    <label>Region
+      <select v-model="f.region"><option value="">All regions</option>
+        <option v-for="r in options.regions" :key="r">{{ r }}</option></select>
+    </label>
+    <label>Channel
+      <select v-model="f.channel"><option value="">All channels</option>
+        <option v-for="c in options.channels" :key="c">{{ c }}</option></select>
+    </label>
+    <label>Category
+      <select v-model="f.category"><option value="">All categories</option>
+        <option v-for="c in options.categories" :key="c">{{ c }}</option></select>
+    </label>
+    <button class="reset" @click="reset">Reset</button>
+  </section>
+
+  <section class="kpis" aria-label="Key performance indicators">
+    <article class="kpi" v-for="k in kpiCards" :key="k.label">
+      <h2>{{ k.label }}</h2>
+      <p class="value">{{ k.value }}</p>
+      <p class="delta" :class="k.cls" :title="'Compared with ' + prevLabel">
+        <span v-if="k.change === null">no comparison period</span>
+        <span v-else>{{ k.change > 0 ? '▲' : k.change < 0 ? '▼' : '■' }} {{ k.changeText }} vs previous</span>
+      </p>
+    </article>
+  </section>
+
+  <section class="grid">
+    <article class="panel wide">
+      <div class="panel-head">
+        <h3>Revenue and profit over time</h3>
+        <div class="toggle">
+          <button v-for="g in ['week', 'month', 'quarter']" :key="g" :class="{ active: grain === g }"
+                  @click="grain = g">{{ g }}</button>
+        </div>
+      </div>
+      <div class="chart tall"><canvas ref="trendCanvas"></canvas></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><h3>Revenue by region</h3><span class="hint">click a bar to filter</span></div>
+      <div class="chart"><canvas ref="regionCanvas"></canvas></div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head"><h3>Revenue and margin by category</h3><span class="hint">click a bar to filter</span></div>
+      <div class="chart"><canvas ref="categoryCanvas"></canvas></div>
+    </article>
+
+    <article class="panel wide">
+      <div class="panel-head">
+        <h3>Top 10 products</h3>
+        <div class="toggle">
+          <button v-for="s in ['revenue', 'profit', 'units']" :key="s" :class="{ active: sort === s }"
+                  @click="sort = s">by {{ s }}</button>
+          <a class="export" :href="exportUrl">Export CSV</a>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>Product</th><th>Category</th><th class="num">Units</th>
+          <th class="num">Revenue</th><th class="num">Profit</th><th class="num">Margin</th><th>Share of revenue</th></tr></thead>
+        <tbody>
+          <tr v-for="(p, i) in products" :key="p.product_id">
+            <td>{{ i + 1 }}</td><td>{{ p.product_name }}</td><td>{{ p.category }}</td>
+            <td class="num">{{ int(p.units) }}</td><td class="num">{{ money(p.revenue) }}</td>
+            <td class="num">{{ money(p.profit) }}</td>
+            <td class="num" :class="{ low: p.margin_pct < 30 }">{{ p.margin_pct.toFixed(1) }}%</td>
+            <td><div class="bar"><span :style="{ width: share(p) + '%' }"></span></div></td>
+          </tr>
+          <tr v-if="!products.length"><td colspan="8" class="empty">No sales match these filters.</td></tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+
+  <footer>Built with FastAPI, SQLite, Vue 3 and Chart.js · API docs at <a href="/docs">/docs</a> · Mohamed Moin Peer</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

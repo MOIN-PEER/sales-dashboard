@@ -1,0 +1,15 @@
+{
+  "name": "sales-dashboard-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend packages for the sales dashboard. Copies are already bundled in frontend/vendor/, so npm is optional.",
+  "scripts": {
+    "vendor": "node scripts/copy_vendor.js"
+  },
+  "dependencies": {
+    "vue": "3.4.38",
+    "chart.js": "4.4.4"
+  },
+  "author": "Mohamed Moin Peer",
+  "license": "MIT"
+}

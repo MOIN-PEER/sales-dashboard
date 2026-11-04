@@ -1,0 +1,78 @@
+:root {
+  --bg: #f4f6f9;
+  --panel: #ffffff;
+  --ink: #1d2733;
+  --muted: #637083;
+  --line: #e2e7ee;
+  --brand: #2f6db5;
+  --brand-soft: #e3edf8;
+  --good: #2e8b57;
+  --bad: #c8453b;
+  --profit: #f0a830;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+[v-cloak] { display: none; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+       font: 14px/1.45 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif; }
+#app { max-width: 1360px; margin: 0 auto; padding: 20px 24px 32px; }
+
+.topbar { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 16px; }
+h1 { margin: 0; font-size: 24px; letter-spacing: -0.01em; }
+.sub { margin: 2px 0 0; color: var(--muted); }
+.status { color: var(--muted); font-size: 13px; }
+.status.error { color: var(--bad); font-weight: 600; }
+
+.filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 14px 16px;
+           background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 16px; }
+.filters label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); gap: 4px; }
+.filters input, .filters select { font: inherit; color: var(--ink); padding: 6px 8px; min-width: 140px;
+                                  border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.presets, .toggle { display: flex; gap: 4px; align-items: center; }
+button { font: inherit; cursor: pointer; border: 1px solid var(--line); background: #fff; color: var(--ink);
+         padding: 6px 10px; border-radius: 6px; text-transform: capitalize; }
+button:hover { border-color: var(--brand); }
+button.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+button.reset { margin-left: auto; }
+
+.kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.kpi h2 { margin: 0; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.kpi .value { margin: 6px 0 2px; font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.delta { margin: 0; font-size: 12px; color: var(--muted); }
+.delta.up { color: var(--good); }
+.delta.down { color: var(--bad); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
+.panel.wide { grid-column: 1 / -1; }
+.panel-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+h3 { margin: 0; font-size: 15px; }
+.hint { font-size: 12px; color: var(--muted); }
+.chart { position: relative; height: 300px; }
+.chart.tall { height: 320px; }
+.export { margin-left: 8px; font-size: 13px; color: var(--brand); text-decoration: none; border: 1px solid var(--brand);
+          padding: 5px 10px; border-radius: 6px; }
+
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+th { font-size: 12px; color: var(--muted); font-weight: 600; }
+.num { text-align: right; }
+td.low { color: var(--bad); font-weight: 600; }
+.bar { background: var(--brand-soft); border-radius: 4px; height: 10px; width: 140px; }
+.bar span { display: block; height: 100%; background: var(--brand); border-radius: 4px; }
+.empty { text-align: center; color: var(--muted); padding: 24px; }
+footer { margin-top: 20px; color: var(--muted); font-size: 12px; text-align: center; }
+footer a { color: var(--brand); }
+
+@media (max-width: 1000px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+  .bar { width: 80px; }
+}
+@media (max-width: 560px) {
+  #app { padding: 12px; }
+  .kpis { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  th:nth-child(3), td:nth-child(3), th:nth-child(8), td:nth-child(8) { display: none; }
+}
